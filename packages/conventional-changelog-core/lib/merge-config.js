@@ -133,7 +133,7 @@ function mergeConfig (options, context, gitRawCommitsOpts, parserOpts, writerOpt
       let gitSemverTags = []
 
       if (configPromise) {
-        if (configObj.state === 'fulfilled') {
+        if (configObj.status === 'fulfilled') {
           config = configObj.value
         } else {
           options.warn('Error in config' + configObj.reason.toString())
@@ -146,7 +146,7 @@ function mergeConfig (options, context, gitRawCommitsOpts, parserOpts, writerOpt
       context = Object.assign(context, config.context)
 
       if (options.pkg) {
-        if (pkgObj.state === 'fulfilled') {
+        if (pkgObj.status === 'fulfilled') {
           if (options.pkg.path) {
             pkg = pkgObj.value
           } else {
@@ -159,7 +159,7 @@ function mergeConfig (options, context, gitRawCommitsOpts, parserOpts, writerOpt
         }
       }
 
-      if ((!pkg || !pkg.repository || !pkg.repository.url) && gitRemoteOriginUrlObj.state === 'fulfilled') {
+      if ((!pkg || !pkg.repository || !pkg.repository.url) && gitRemoteOriginUrlObj.status === 'fulfilled') {
         pkg = pkg || {}
         pkg.repository = pkg.repository || {}
         pkg.repository.url = gitRemoteOriginUrlObj.value
@@ -199,7 +199,7 @@ function mergeConfig (options, context, gitRawCommitsOpts, parserOpts, writerOpt
 
       context.version = context.version || ''
 
-      if (tagsObj.state === 'fulfilled') {
+      if (tagsObj.status === 'fulfilled') {
         gitSemverTags = context.gitSemverTags = tagsObj.value
         fromTag = gitSemverTags[options.releaseCount - 1]
         const lastTag = gitSemverTags[0]
