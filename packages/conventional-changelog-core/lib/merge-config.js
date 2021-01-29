@@ -19,6 +19,17 @@ const _ = require('lodash')
 
 const rhosts = /github|bitbucket|gitlab/i
 
+// TODO: delete when min node target is set to 12.10+
+Promise.allSettled = Promise.allSettled || function (promises) {
+  const wrappedPromises = promises.map((p) =>
+    Promise.resolve(p).then(
+      (value) => ({ status: 'fulfilled', value }),
+      (reason) => ({ status: 'rejected', reason })
+    )
+  )
+  return Promise.all(wrappedPromises)
+}
+
 function semverTagsPromise (options) {
   return Q.Promise(function (resolve, reject) {
     gitSemverTags({ lernaTags: !!options.lernaPackage, package: options.lernaPackage, tagPrefix: options.tagPrefix, skipUnstable: options.skipUnstable }, function (err, result) {
@@ -110,8 +121,8 @@ function mergeConfig (options, context, gitRawCommitsOpts, parserOpts, writerOpt
 
   const gitRemoteOriginUrlPromise = Q(gitRemoteOriginUrl())
 
-  return Q.allSettled([configPromise, pkgPromise, semverTagsPromise(options), gitRemoteOriginUrlPromise])
-    .spread(function (configObj, pkgObj, tagsObj, gitRemoteOriginUrlObj) {
+  return Promise.allSettled([configPromise, pkgPromise, semverTagsPromise(options), gitRemoteOriginUrlPromise])
+    .then(function ([configObj, pkgObj, tagsObj, gitRemoteOriginUrlObj]) {
       let config
       let pkg
       let fromTag
