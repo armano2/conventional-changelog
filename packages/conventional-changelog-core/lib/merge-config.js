@@ -213,7 +213,7 @@ function mergeConfig (options, context, gitRawCommitsOpts, parserOpts, writerOpt
         }
       }
 
-      if (!_.isBoolean(options.outputUnreleased)) {
+      if (typeof options.outputUnreleased !== 'boolean') {
         options.outputUnreleased = true
       }
 
@@ -323,7 +323,7 @@ function mergeConfig (options, context, gitRawCommitsOpts, parserOpts, writerOpt
             }
           }
 
-          if (!_.isBoolean(context.linkCompare) && context.previousTag && context.currentTag) {
+          if (typeof context.linkCompare !== 'boolean' && context.previousTag && context.currentTag) {
             context.linkCompare = true
           }
 
