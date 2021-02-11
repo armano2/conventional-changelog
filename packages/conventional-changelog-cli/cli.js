@@ -171,7 +171,7 @@ try {
   process.exit(1)
 }
 
-const gitRawCommitsOpts = _.merge({}, config.gitRawCommitsOpts || {})
+const gitRawCommitsOpts = Object.assign({}, config.gitRawCommitsOpts || {})
 if (flags.commitPath) gitRawCommitsOpts.path = flags.commitPath
 
 const changelogStream = conventionalChangelog(options, templateContext, gitRawCommitsOpts, config.parserOpts, config.writerOpts)
